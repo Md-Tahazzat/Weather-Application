@@ -1,5 +1,4 @@
 import { useContext, useEffect, useState } from "react";
-import { InfoContext } from "./Provider/Provider";
 import CityInformation from "./Components/CityInformation";
 import ToggleButton from "./Components/ToggleButton";
 import WeatherInfo from "./Components/WeatherInfo";
@@ -95,24 +94,21 @@ function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between items-center gap-8">
               <Humidity
                 isLoading={isLoading}
-                cityInfo={data?.location}
+                humidity={data?.current?.humidity}
               ></Humidity>
               <Wind isLoading={isLoading} cityInfo={data?.location}></Wind>
               <Precipitation
                 isLoading={isLoading}
-                cityInfo={data?.location}
+                preciptitation={data?.current}
               ></Precipitation>
-              <UVindex
-                isLoading={isLoading}
-                cityInfo={data?.location}
-              ></UVindex>
+              <UVindex isLoading={isLoading} forecast={data?.current}></UVindex>
               <Temperature
                 isLoading={isLoading}
-                cityInfo={data?.location}
+                temperature={data?.current}
               ></Temperature>
               <RainPossibility
                 isLoading={isLoading}
-                cityInfo={data?.location}
+                forecast={data?.forecast}
               ></RainPossibility>
             </div>
           </div>
