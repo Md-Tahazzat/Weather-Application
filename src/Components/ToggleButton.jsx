@@ -1,7 +1,7 @@
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 
-const ToggleButton = () => {
+const ToggleButton = ({ handleSearch }) => {
   return (
     <div className="flex items-center justify-between w-full">
       <a
@@ -10,18 +10,20 @@ const ToggleButton = () => {
       >
         +
       </a>
-      <div className="w-3/6">
-        <div className="input-group">
-          <input
-            type="text"
-            placeholder="Enter city name"
-            className="px-2 bg-slate-50 w-full"
-          />
-          <button className="btn-sm px-2 bg-slate-800 text-slate-50 hover:bg-slate-900">
-            <BsSearch></BsSearch>
-          </button>
-        </div>
-      </div>
+      <form onSubmit={handleSearch} className="input-group w-3/6">
+        <input
+          name="searchInput"
+          type="text"
+          placeholder="City name"
+          className="px-2 bg-slate-50 w-full focus:outline-none"
+        />
+        <button
+          type="submit"
+          className="btn-sm px-2 bg-slate-800 text-slate-50 hover:bg-slate-900"
+        >
+          <BsSearch></BsSearch>
+        </button>
+      </form>
       <div className="flex items-center gap-1 text-slate-50">
         °C
         <input
