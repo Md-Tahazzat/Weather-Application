@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
 import { BsSearch } from "react-icons/bs";
+import { InfoContext } from "../Provider/Provider";
 
-const ToggleButton = ({ handleSearch }) => {
+const ToggleButton = ({ isLoading, handleSearch }) => {
+  const { showCelsius, setShowCelsius } = useContext(InfoContext);
   return (
     <div className="flex items-center justify-between w-full">
       <a
@@ -19,6 +21,7 @@ const ToggleButton = ({ handleSearch }) => {
         />
         <button
           type="submit"
+          disabled={!!isLoading}
           className="btn-sm px-2 bg-slate-800 text-slate-50 hover:bg-slate-900"
         >
           <BsSearch></BsSearch>
@@ -27,6 +30,7 @@ const ToggleButton = ({ handleSearch }) => {
       <div className="flex items-center gap-1 text-slate-50">
         °C
         <input
+          onClick={() => setShowCelsius(!showCelsius)}
           type="checkbox"
           className="toggle-sm toggle border-none bg-slate-50 "
         />

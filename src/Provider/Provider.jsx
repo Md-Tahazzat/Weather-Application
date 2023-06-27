@@ -2,10 +2,10 @@ import React, { createContext, useState } from "react";
 
 export const InfoContext = createContext(null);
 const Provider = ({ children }) => {
-  const [activeSection, setActiveSection] = useState("false");
+  const [showCelsius, setShowCelsius] = useState(true);
   const info = {
-    activeSection,
-    setActiveSection,
+    showCelsius,
+    setShowCelsius,
   };
   return <InfoContext.Provider value={info}>{children}</InfoContext.Provider>;
 };
