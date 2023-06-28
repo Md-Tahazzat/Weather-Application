@@ -18,6 +18,22 @@ export default {
   },
   plugins: [require("daisyui")],
   daisyui: {
-    themes: false,
+    themes: [
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["[data-theme=light]"],
+          primary: "#5C9CE5",
+          "primary-focus": "mediumblue",
+        },
+      },
+      {
+        dark: {
+          ...require("daisyui/src/theming/themes")["[data-theme=dark]"],
+          primary: "#5C9CE5",
+          "primary-focus": "mediumblue",
+        },
+      },
+      ,
+    ],
   },
 };

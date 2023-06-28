@@ -14,7 +14,7 @@ import { useQuery } from "react-query";
 
 function App() {
   const [queryData, setQueryData] = useState(null);
-  const isLoading = false;
+  const [searchError, setSearchError] = useState("");
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -34,7 +34,7 @@ function App() {
   }, []);
 
   // get the weather information
-  const { data, isError } = useQuery(
+  const { data, isLoading, isError } = useQuery(
     ["weather", queryData],
     async () => {
       const url = `http://api.weatherapi.com/v1/forecast.json?key=${
@@ -42,12 +42,17 @@ function App() {
       }&q=${queryData}`;
       const res = await fetch(url);
       const data = await res.json();
+      if (data?.error?.code === 1006) {
+        setSearchError(data?.error?.message);
+        return [];
+      }
+      setSearchError("");
       return data;
     },
     {
       enabled: !!queryData,
       onError: (err) => {
-        console.log(err);
+        console.log(err.message);
       },
     }
   );
@@ -59,7 +64,6 @@ function App() {
     setQueryData(e.target.searchInput.value);
     e.target.searchInput.value = "";
   };
-  console.log(data);
   return (
     <div className="max-w-[85rem] pt-0 pb-4 md:pb-1 md:pt-1 md:px-4 lg:mx-auto w-full lg:flex items-center justify-center">
       <div className="w-full border-none bg-[#5C9CE5] shadow-2xl min-h-[44rem] lg:rounded-[2.5rem] md:my-10 overflow-hidden  md:rounded-2xl border flex flex-col md:flex-row">
@@ -72,7 +76,11 @@ function App() {
             isLoading={isLoading}
             handleSearch={handleSearch}
           ></ToggleButton>
-          <CityInformation isLoading={isLoading} data={data}></CityInformation>
+          <CityInformation
+            searchError={searchError}
+            isLoading={isLoading}
+            data={data}
+          ></CityInformation>
           <WeatherInfo
             isLoading={isLoading}
             current={data?.current}
@@ -84,8 +92,9 @@ function App() {
             titleStyle="text-2xl"
           ></Navbar>
           <HourlyWeatherInfo
+            location={data?.location}
             isLoading={isLoading}
-            cityInfo={data?.location}
+            forecast={data?.forecast}
           ></HourlyWeatherInfo>
           <div className="mt-8 md:mt-12 lg:mt-14">
             <h1 className="text-2xl font-bold mb-6">
@@ -94,12 +103,12 @@ function App() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 justify-between items-center gap-8">
               <Humidity
                 isLoading={isLoading}
-                humidity={data?.current?.humidity}
+                current={data?.current}
               ></Humidity>
-              <Wind isLoading={isLoading} cityInfo={data?.location}></Wind>
+              <Wind isLoading={isLoading} current={data?.current}></Wind>
               <Precipitation
                 isLoading={isLoading}
-                preciptitation={data?.current}
+                current={data?.current}
               ></Precipitation>
               <UVindex isLoading={isLoading} forecast={data?.current}></UVindex>
               <Temperature

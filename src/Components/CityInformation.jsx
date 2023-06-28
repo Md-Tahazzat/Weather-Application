@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { FaLocationArrow } from "react-icons/fa";
 import { FiSunrise, FiSunset } from "react-icons/fi";
 
-const CityInformation = ({ isLoading, data }) => {
+const CityInformation = ({ isLoading, data, searchError }) => {
   const { location, forecast, current } = data || [];
   const sunrise = forecast?.forecastday[0]?.astro?.sunrise?.split(" ")[0];
   const sunset = forecast?.forecastday[0]?.astro?.sunset?.split(" ")[0];
@@ -33,12 +33,14 @@ const CityInformation = ({ isLoading, data }) => {
   return (
     <div className="mt-14 text-white lg:mt-16 flex items-center justify-between">
       {!!isLoading ? (
-        <span className="loading loading-dots mx-auto"></span>
+        <span className="loading loading-dots mx-auto py-20 md:py-0"></span>
+      ) : !!searchError ? (
+        <span className="text-red-500 text-2xl">{searchError}</span>
       ) : (
         <>
           <div className="">
             <h1 className="text-[1.3rem] mb-1 font-semibold flex items-center gap-2">
-              <FaLocationArrow className="text-slate-300 text-sm"></FaLocationArrow>{" "}
+              <FaLocationArrow className="text-slate-300 text-sm"></FaLocationArrow>
               {location?.name}, {location?.country}
             </h1>
             <h4 className="text-lg font-semibold">Today {currentMonth}</h4>

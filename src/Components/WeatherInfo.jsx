@@ -3,9 +3,13 @@ import { MdArrowForwardIos, MdOutlineArrowBackIosNew } from "react-icons/md";
 import { BiSun } from "react-icons/bi";
 import { InfoContext } from "../Provider/Provider";
 
-const WeatherInfo = ({ current }) => {
+const WeatherInfo = ({ current, isLoading }) => {
   const { showCelsius } = useContext(InfoContext);
-  return (
+  return isLoading ? (
+    <div className="w-ful h-3/6 text-slate-50 flex items-center justify-center">
+      <span className="loading loading-spinner"></span>
+    </div>
+  ) : (
     <>
       <div className="flex px-10 md:px-0 items-center justify-between mt-8 md:mt-14 lg:mt-20">
         <MdOutlineArrowBackIosNew className="text-2xl text-white"></MdOutlineArrowBackIosNew>
