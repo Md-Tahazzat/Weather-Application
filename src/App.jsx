@@ -39,7 +39,7 @@ function App() {
   const { data, isLoading, isError } = useQuery(
     ["weather", queryData],
     async () => {
-      const url = `http://api.weatherapi.com/v1/forecast.json?key=${
+      const url = `https://api.weatherapi.com/v1/forecast.json?key=${
         import.meta.env.VITE_API_KEY
       }&q=${queryData}`;
       const res = await fetch(url);
