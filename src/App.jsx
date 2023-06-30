@@ -28,6 +28,7 @@ function App() {
           setQueryData(coords);
         },
         (error) => {
+          setQueryData("22.97,87.74");
           console.log(error);
         }
       );
