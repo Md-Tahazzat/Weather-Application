@@ -15,6 +15,7 @@ import { useQuery } from "react-query";
 function App() {
   const [queryData, setQueryData] = useState(null);
   const [searchError, setSearchError] = useState("");
+  const [backgroundImage, setBackgroundImage] = useState("");
   useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
@@ -57,34 +58,77 @@ function App() {
     }
   );
 
+  // function to get background image url based on weather condition
+  const getBackgroundImage = (weatherCondition) => {
+    switch (weatherCondition) {
+      case "Partly cloudy":
+        return "https://i.ibb.co/ggJTzVM/partly-cloudy.png";
+      case "Sunny":
+        return "https://i.ibb.co/GJLGXDn/sunny.png";
+      case "Clear":
+        return "https://i.ibb.co/1bCK5HL/clear-night.png";
+      case "Moderate or heavy rain shower":
+        return "https://i.ibb.co/8Xjc7BX/light-rain-shower.png";
+      case "Moderate rain":
+        return "https://i.ibb.co/jLhyKf1/moderate-rain.png";
+      case "Rain":
+        return "https://i.ibb.co/8Xjc7BX/light-rain-shower.png";
+      case "Light rain shower":
+        return "https://i.ibb.co/8Xjc7BX/light-rain-shower.png";
+      case "Patchy rain possible":
+        return "https://i.ibb.co/cg9BbHd/patchy-rainy-possiable.png";
+      case "Overcast":
+        return "https://i.ibb.co/GptS0Z1/overcast.png";
+      case "Fog":
+        return "https://i.ibb.co/mCkVr1X/fog.png";
+      default:
+        return "https://i.ibb.co/8Xjc7BX/light-rain-shower.png";
+    }
+  };
   // function to get the searchInput value.
   const handleSearch = (e) => {
     e.preventDefault();
+    setBackgroundImage("");
     if (e.target.searchInput.value === "") return;
     setQueryData(e.target.searchInput.value);
     e.target.searchInput.value = "";
   };
+  if (data?.current && !backgroundImage) {
+    const weatherCondition = data.current.condition.text;
+    const backgroundImageStyle = {
+      backgroundImage: `url(${getBackgroundImage(weatherCondition)})`,
+    };
+    setBackgroundImage(backgroundImageStyle);
+  }
   return (
     <div className="max-w-[85rem] pt-0 pb-4 md:pb-1 md:pt-1 md:px-4 lg:mx-auto w-full lg:flex items-center justify-center">
       <div className="w-full border-none bg-[#5C9CE5] shadow-2xl min-h-[44rem] lg:rounded-[2.5rem] md:my-10 overflow-hidden  md:rounded-2xl border flex flex-col md:flex-row">
-        <section className="w-full md:w-[30%] p-3 md:p-4 lg:p-10">
-          <Navbar
-            defaultStyle="text-slate-50 flex mb-12 md:hidden border-b-2 border-blue-300 pb-3"
-            titleStyle="text-2xl"
-          ></Navbar>
-          <ToggleButton
-            isLoading={isLoading}
-            handleSearch={handleSearch}
-          ></ToggleButton>
-          <CityInformation
-            searchError={searchError}
-            isLoading={isLoading}
-            data={data}
-          ></CityInformation>
-          <WeatherInfo
-            isLoading={isLoading}
-            current={data?.current}
-          ></WeatherInfo>
+        <section className="w-full md:w-[30%] ">
+          <div className="p-3 md:p-4 lg:p-10">
+            <Navbar
+              defaultStyle="text-slate-50 flex mb-12 md:hidden border-b-2 border-blue-300 pb-3"
+              titleStyle="text-2xl"
+            ></Navbar>
+            <ToggleButton
+              isLoading={isLoading}
+              handleSearch={handleSearch}
+            ></ToggleButton>
+            <CityInformation
+              searchError={searchError}
+              isLoading={isLoading}
+              data={data}
+            ></CityInformation>
+            <WeatherInfo
+              isLoading={isLoading}
+              current={data?.current}
+            ></WeatherInfo>
+          </div>
+          {backgroundImage && (
+            <div
+              style={backgroundImage}
+              className={`w-full h-[527px] hidden bg-no-repeat bg-cover md:block`}
+            ></div>
+          )}
         </section>
         <section className="w-full border-none md:w-[72%] bg-blue-100 p-3 md:p-4 lg:p-10 lg:rounded-[2.5rem] rounded-2xl md:rounded-2xl">
           <Navbar
